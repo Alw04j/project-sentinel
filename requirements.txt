@@ -1,0 +1,16 @@
+# Web Framework
+Django==5.0.3
+djangorestframework==3.15.1
+
+# Database & Environment
+mysqlclient==2.2.4
+python-dotenv==1.0.1
+
+# Network & Security Scanning
+python-nmap==0.7.1
+requests==2.31.0
+scapy==2.5.0
+
+# AI / Data Processing (Optional, based on your specific AI implementation)
+pandas==2.2.1
+scikit-learn==1.4.1.post1

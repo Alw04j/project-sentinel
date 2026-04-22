@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card bg-dark border-secondary p-4" style="width: 450px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+        <div class="text-center mb-4">
+            <h2 class="text-success"><i class="fas fa-user-plus"></i> SIGN UP</h2>
+            <p class="text-white-50 small">Register as a Sentinel Analyst</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="text-light mb-3 auth-form">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-success w-100 py-2">Create Account</button>
+        </form>
+        <div class="mt-3 text-center">
+            <a href="{% url 'login' %}" class="text-info small text-decoration-none">Already have an account? Login</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* This makes the default Django form look good in Dark Mode */
+    .auth-form p { margin-bottom: 15px; }
+    .auth-form input { 
+        width: 100%; 
+        padding: 8px; 
+        background: #2b2b2b; 
+        border: 1px solid #444; 
+        color: white; 
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}

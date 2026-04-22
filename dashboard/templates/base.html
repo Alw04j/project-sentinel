@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentinel | Security Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0f0f0f; color: #e0e0e0; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { width: 250px; height: 100vh; background: #161616; border-right: 1px solid #333; position: fixed; z-index: 1000; }
+        .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250px); }
+        .nav-link { color: #888; margin: 5px 0; padding: 10px 15px; border-radius: 6px; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: #fff; background: #0d6efd; }
+        .nav-link i { width: 25px; }
+        .alert-floating { position: fixed; top: 20px; right: 20px; z-index: 2000; min-width: 300px; }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="alert-floating">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-lg border-0">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="sidebar p-3 shadow">
+        <h4 class="text-white mb-4"><i class="fas fa-shield-alt text-primary"></i> SENTINEL</h4>
+        <ul class="nav flex-column">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}" href="{% url 'history' %}">
+                        <i class="fas fa-database"></i> Intelligence Logs
+                    </a>
+                </li>
+
+                {% if user.is_staff or user.userprofile.role == 'Admin' or user.userprofile.role == 'Analyst' %}
+                    <hr class="border-secondary">
+                    <p class="text-light small px-3 mb-1 fw-bold text-uppercase" style="letter-spacing: 1px; opacity: 0.8;">Admin Protocol</p>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'network_scan' %}active{% endif %}" href="{% url 'network_scan' %}">
+                            <i class="fas fa-network-wired"></i> Network Recon
+                        </a>
+                    </li>
+                {% endif %}
+
+                <div class="mt-auto pt-5">
+                    <hr class="border-secondary">
+                    <div class="px-3 mb-3">
+                        <small class="text-light d-block" style="opacity: 0.6;">Current Analyst:</small>
+                        <span class="text-info fw-bold">{{ user.username }}</span>
+                        {% if user.userprofile.role == 'Admin' or user.is_staff %}
+                            <span class="badge bg-danger ms-1" style="font-size: 0.6rem;">ADMIN</span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'logout' %}" class="nav-link text-danger"><i class="fas fa-power-off"></i> Logout</a>
+                </div>
+            {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fas fa-key"></i> Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
